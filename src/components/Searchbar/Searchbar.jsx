@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { BsSearchHeart } from 'react-icons/bs';
 
@@ -10,25 +10,22 @@ import {
   SearchFormInput,
 } from './Searchbar.styled';
 
-export class Searchbar extends Component {
-  state = {
-    searchName: '',
+export const Searchbar = ({ onSearchSubmit }) => {
+  const [searchName, setSearchName] = useState('');
+
+  const handleInput = ({ target: { value } }) => {
+    setSearchName(value);
   };
 
-  handleChange = ({ target: { value } }) => {
-    this.setState({ searchName: value.toLowerCase() });
-  };
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    this.props.onSearchSubmit(this.state.searchName);
-    this.setState({ searchName: '' });
+    onSearchSubmit(searchName);
+    setSearchName('');
   };
-  render() {
-    const { searchName } = this.state;
 
     return (
       <Header>
-        <SearchForm onSubmit={this.handleSubmit}>
+        <SearchForm onSubmit={handleSubmit}>
           <SearchFormBtn type="submit">
             <BsSearchHeart size="24" />
           </SearchFormBtn>
@@ -38,13 +35,13 @@ export class Searchbar extends Component {
             autoFocus
             placeholder="Search images and photos"
             value={searchName}
-            onChange={this.handleChange}
+            onChange={handleInput}
           />
         </SearchForm>
       </Header>
     );
   }
-}
+
 
 Searchbar.propTypes = {
   onSearchSubmit: PropTypes.func.isRequired,

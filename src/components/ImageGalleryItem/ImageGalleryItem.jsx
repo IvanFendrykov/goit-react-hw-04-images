@@ -1,39 +1,34 @@
 import { ListItem, Picture } from './ImageGalleryItem.styled';
-import React, { Component } from 'react';
+import{useState}  from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'components/Modal/Modal';
+import {Modal} from 'components/Modal/Modal';
 
-export  class ImageGalleryItem extends Component {
-  state = {
-    isModalOpen: false,
-  };
+export const ImageGalleryItem = ({
+  image: {largeImageURL, webformatURL, tags } 
+}) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-  openModal = () => {
-    this.setState({ isModalOpen: true });
-  };
+  const openModal = () => {
+    setIsModalOpen(true);
+};
 
-  closeModal = ({ code, target: { nodeName } }) => {
+  const closeModal = ({ code, target: { nodeName } }) => {
     if (code === 'Escape' || nodeName === 'DIV') {
-      this.setState({ isModalOpen: false });
+      setIsModalOpen(false);
     }
   };
-
-  render() {
-    const { isModalOpen } = this.state;
-    const { largeImageURL, webformatURL, tags } = this.props.image;
-
     return (
       <ListItem>
-        <span onClick={this.openModal}>
+        <span onClick={openModal}>
           <Picture src={`${webformatURL}`} alt={`${tags}`} />
         </span>
         {isModalOpen && (
-          <Modal image={largeImageURL} alt={tags} onClose={this.closeModal} />
+          <Modal image={largeImageURL} alt={tags} onClose={closeModal} />
         )}
       </ListItem>
     );
   }
-}
+
 
 ImageGalleryItem.propTypes = {
   image: PropTypes.shape({
